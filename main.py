@@ -12,8 +12,19 @@ LONG_BREAK_MIN = 20
 # ---------------------------- TIMER RESET ------------------------------- # 
 
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
+def start_timer():
+    count_down(canvas, WORK_MIN * 60)
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
+def count_down(canva, count):
+    count_min = count // 60
+    count_sec = count % 60
+    if count_sec < 10:
+        count_sec = f"0{count_sec}"
+    
+    canva.itemconfig("timer", text=f"{count_min}:{count_sec}")
+    if count > 0:
+        window.after(1000, count_down, canva, count - 1)
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
@@ -32,7 +43,7 @@ canvas.create_text(100, 130, text="00:00", fill="white", font=(FONT_NAME, 35, "b
 canvas.grid(row=1, column=1, pady=20)
 
 # Buttons in a row below the canvas
-start_button = Button(text="Start", command=lambda: print("Start clicked"), bg=GREEN, fg="white", font=(FONT_NAME, 12, "bold"))
+start_button = Button(text="Start", command=start_timer, bg=GREEN, fg="white", font=(FONT_NAME, 12, "bold"))
 start_button.grid(row=2, column=0, padx=(0, 20))
 
 reset_button = Button(text="Reset", command=lambda: print("Reset clicked"), bg=RED, fg="white", font=(FONT_NAME, 12, "bold"))
