@@ -17,7 +17,7 @@ pygame.mixer.init()
 
 def play_sound():
     try:
-        pygame.mixer.music.load("censor-beep.mp3")  # Replace with your MP3 filename
+        pygame.mixer.music.load("censor-beep.mp3")  
         pygame.mixer.music.play()
     except pygame.error:
         print("Could not play sound file. Make sure 'censor-beep.mp3' exists in the project folder.")
