@@ -5,7 +5,7 @@ RED = "#e7305b"
 GREEN = "#9bdeac"
 YELLOW = "#f7f5dd"
 FONT_NAME = "Courier"
-WORK_MIN = 25
+WORK_MIN = 1
 SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 REPS = 0
@@ -43,7 +43,8 @@ def count_down(canva, count):
         window.after(1000, count_down, canva, count - 1)
     else:
         start_timer()
-        checkmark.config(text="✔" * (REPS // 2))
+        if REPS % 2 == 1:  # Only add checkmark after work sessions (odd REPS)
+            checkmark.config(text="✔" * ((REPS + 1) // 2))
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
@@ -69,7 +70,7 @@ reset_button = Button(text="Reset", command=lambda: print("Reset clicked"), bg=R
 reset_button.grid(row=2, column=2, padx=(20, 0))
 
 # Checkmarks at the bottom
-checkmark = Label(text="✔", fg=GREEN, bg=YELLOW, font=(FONT_NAME, 15, "bold"))
+checkmark = Label(text="", fg=GREEN, bg=YELLOW, font=(FONT_NAME, 15, "bold"))
 checkmark.grid(row=3, column=1, pady=(20, 0))
 
 window.mainloop()
