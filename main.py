@@ -1,4 +1,5 @@
 from tkinter import *
+import pygame
 # ---------------------------- CONSTANTS ------------------------------- #
 PINK = "#e2979c"
 RED = "#e7305b"
@@ -10,6 +11,16 @@ SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 REPS = 0
 timer = None
+
+# Initialize pygame mixer for sound
+pygame.mixer.init()
+
+def play_sound():
+    try:
+        pygame.mixer.music.load("censor-beep.mp3")  # Replace with your MP3 filename
+        pygame.mixer.music.play()
+    except pygame.error:
+        print("Could not play sound file. Make sure 'censor-beep.mp3' exists in the project folder.")
 
 # ---------------------------- TIMER RESET ------------------------------- # 
 def reset_timer():
@@ -27,6 +38,9 @@ def start_timer():
     short_break_sec = SHORT_BREAK_MIN * 60
     long_break_sec = LONG_BREAK_MIN * 60
     REPS += 1
+    
+    # Play MP3 sound when session starts
+    play_sound()
 
     if REPS % 8 == 0:
         count_down(canvas, long_break_sec)
