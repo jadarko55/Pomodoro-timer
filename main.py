@@ -8,12 +8,28 @@ FONT_NAME = "Courier"
 WORK_MIN = 25
 SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
+REPS = 0
 
 # ---------------------------- TIMER RESET ------------------------------- # 
 
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
 def start_timer():
-    count_down(canvas, WORK_MIN * 60)
+    global REPS
+    work_sec = WORK_MIN * 60
+    short_break_sec = SHORT_BREAK_MIN * 60
+    long_break_sec = LONG_BREAK_MIN * 60
+    REPS += 1
+
+    if REPS % 8 == 0:
+        count_down(canvas, long_break_sec)
+        timer_label.config(text="Break", fg=RED)
+    elif REPS % 2 == 0:
+        count_down(canvas, short_break_sec)
+        timer_label.config(text="Break", fg=PINK)
+    else:
+        count_down(canvas, work_sec)
+        timer_label.config(text="Work", fg=GREEN)
+        
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
 def count_down(canva, count):
@@ -25,6 +41,9 @@ def count_down(canva, count):
     canva.itemconfig("timer", text=f"{count_min}:{count_sec}")
     if count > 0:
         window.after(1000, count_down, canva, count - 1)
+    else:
+        start_timer()
+        checkmark.config(text="✔" * (REPS // 2))
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
