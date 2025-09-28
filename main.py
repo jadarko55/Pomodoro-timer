@@ -9,8 +9,16 @@ WORK_MIN = 1
 SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 REPS = 0
+timer = None
 
 # ---------------------------- TIMER RESET ------------------------------- # 
+def reset_timer():
+    global REPS
+    window.after_cancel(timer)
+    canvas.itemconfig("timer", text="00:00")
+    timer_label.config(text="Timer", fg=GREEN)
+    checkmark.config(text="")
+    REPS = 0
 
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
 def start_timer():
@@ -32,15 +40,16 @@ def start_timer():
         
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
-def count_down(canva, count):
+def count_down(canvas, count):
     count_min = count // 60
     count_sec = count % 60
     if count_sec < 10:
         count_sec = f"0{count_sec}"
-    
-    canva.itemconfig("timer", text=f"{count_min}:{count_sec}")
+
+    canvas.itemconfig("timer", text=f"{count_min}:{count_sec}")
     if count > 0:
-        window.after(1000, count_down, canva, count - 1)
+        global timer
+        timer = window.after(1000, count_down, canvas, count - 1)
     else:
         start_timer()
         if REPS % 2 == 1:  # Only add checkmark after work sessions (odd REPS)
@@ -66,7 +75,7 @@ canvas.grid(row=1, column=1, pady=20)
 start_button = Button(text="Start", command=start_timer, bg=GREEN, fg="white", font=(FONT_NAME, 12, "bold"))
 start_button.grid(row=2, column=0, padx=(0, 20))
 
-reset_button = Button(text="Reset", command=lambda: print("Reset clicked"), bg=RED, fg="white", font=(FONT_NAME, 12, "bold"))
+reset_button = Button(text="Reset", command=reset_timer, bg=RED, fg="white", font=(FONT_NAME, 12, "bold"))
 reset_button.grid(row=2, column=2, padx=(20, 0))
 
 # Checkmarks at the bottom
